@@ -1,0 +1,30 @@
+/*
+    File: Main.css
+    Names: Erik Cohen, Matt Cerrato, Andy Xu
+    Class: CS 361
+    Project 4
+    Date: February 28
+*/
+
+
+/* Set hello button color to light green */
+#helloButton {
+    -fx-background-color: LightGreen;
+}
+
+/* Set goodbye button color to light pink */
+#goodbyeButton {
+    -fx-background-color: LightPink;
+}
+
+/* Set general styling of the button class */
+.button {
+    -fx-border-color: Black;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+
+/* Make font size to 10 */
+.root {
+    -fx-font-size: 10pt;
+}

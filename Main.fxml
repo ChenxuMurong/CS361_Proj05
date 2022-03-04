@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    File: Main.fxml
+    Names: Erik Cohen, Matt Cerrato, Andy Xu
+    Class: CS 361
+    Project 4
+    Date: February 28
+
+-->
+<!-- set primary scene of size 800*600 -->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <!-- make menu bar expand to fill the window if user resizes window  -->
+        <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <menus>
+                <!-- File menu with 6 menu items  -->
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem accelerator="Shortcut+I" mnemonicParsing="false" onAction="#handleAbout" text="About..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem accelerator="Shortcut+N" mnemonicParsing="false" onAction="#handleNew" text="New" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem accelerator="Shortcut+O" mnemonicParsing="false" onAction="#handleOpen" text="Open..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleClose"
+                                  text="Close" fx:id="closeMI"
+                                  accelerator="Shortcut+W" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="saveMI" accelerator="Shortcut+S" mnemonicParsing="false" onAction="#handleSave" text="Save" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleSaveAs"
+                                  text="Save as..." fx:id="saveAsMI"
+                                  accelerator="Shortcut+Shift+S"/>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem accelerator="Shortcut+Q" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    </items>
+                </Menu>
+                <!-- Edit menu also has 6 items  -->
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem fx:id="undoMI" accelerator="Shortcut+Z" mnemonicParsing="false" onAction="#handleUndo" text="Undo" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="redoMI" accelerator="Shortcut+Shift+Z" mnemonicParsing="false" onAction="#handleRedo" text="Redo" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="cutMI" accelerator="Shortcut+X" mnemonicParsing="false" onAction="#handleCut" text="Cut" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="copyMI" accelerator="Shortcut+C" mnemonicParsing="false" onAction="#handleCopy" text="Copy" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="pasteMI" accelerator="Shortcut+V" mnemonicParsing="false" onAction="#handlePaste" text="Paste" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="selectAllMI" accelerator="Shortcut+A" mnemonicParsing="false" onAction="#handleSelectAll" text="Select all" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <!-- use a TabPane to hold the text area  -->
+        <TabPane fx:id="tabPane" layoutX="14.0" layoutY="112.0" maxHeight="1.7976931348623157E308" prefHeight="326.0" prefWidth="500.0" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="74.0">
+            <tabs>
+                <!-- TabPane is initialized to contain one tab, "Untitled-1"  -->
+                <Tab text="Untitled-1" />
+            </tabs>
+        </TabPane>
+        <!-- use a ToolBar to hold the two buttons -->
+        <ToolBar layoutY="27.0" prefHeight="49.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <items>
+                <Button fx:id="helloButton" mnemonicParsing="false" onAction="#handleHelloButton" prefHeight="30.0" prefWidth="50.0" text="Hello" />
+                <Button fx:id="goodbyeButton" mnemonicParsing="false" onAction="#handleGoodbyeButton" prefHeight="30.0" prefWidth="80.0" text="Goodbye" />
+            </items>
+        </ToolBar>
+    </children>
+</AnchorPane>
