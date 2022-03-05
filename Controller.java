@@ -110,7 +110,7 @@ public class Controller {
      *              and its source.
      */
     @FXML
-    private void handleHelloButton(ActionEvent event) {
+    private void handleCompileButton(ActionEvent event) {
         // create a new input dialog
         TextInputDialog inputDialog = new TextInputDialog();
         inputDialog.setTitle("Give me a number");
@@ -133,8 +133,17 @@ public class Controller {
      *              and its source.
      */
     @FXML
-    private void handleGoodbyeButton(ActionEvent event) {
+    private void handleCompileAndRunButton(ActionEvent event) {
         this.getSelectedTextBox().appendText(" Goodbye");
+    }
+
+    /**
+     * Handler to stop a process (UNDER CONSTRUCTION) //TODO: handle stop button
+     * @param event
+     */
+    @FXML
+    private void handleStopButton(ActionEvent event){
+        System.out.println("Stop Button Under Construction");
     }
 
 

@@ -7,14 +7,24 @@
 */
 
 
-/* Set hello button color to light green */
-#helloButton {
-    -fx-background-color: LightGreen;
+/* Add a pale blue background to compile button */
+#compileButton {
+    -fx-background-color: #add8e6;
 }
 
-/* Set goodbye button color to light pink */
-#goodbyeButton {
-    -fx-background-color: LightPink;
+/* Add a pale green background to compile and run button */
+#compileAndRunButton {
+    -fx-background-color: #aafbaa;
+}
+
+/* Add a pale red background to stop button */
+#stopButton {
+    -fx-background-color: #ffccbb;
+}
+
+/* Set up the border of console pane */
+#consolePane{
+    -fx-border-color: Black;
 }
 
 /* Set general styling of the button class */
@@ -28,3 +38,4 @@
 .root {
     -fx-font-size: 10pt;
 }
+
