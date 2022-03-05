@@ -24,7 +24,8 @@
 
 /* Set up the border of console pane */
 #consolePane{
-    -fx-border-color: Black;
+    -fx-border-color: Gray;
+    -fx-border-width: 4 0 0 0;
 }
 
 /* Set general styling of the button class */
