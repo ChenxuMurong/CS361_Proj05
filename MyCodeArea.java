@@ -116,7 +116,7 @@ public class MyCodeArea {
 
         // call when no longer need it: `cleanupWhenFinished.unsubscribe();`
 
-        codeArea.replaceText(0, 0, sampleCode);
+//        codeArea.replaceText(0, 0, sampleCode);
 
     }
 

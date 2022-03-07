@@ -8,12 +8,10 @@
 
 package proj4CerratoCohenXu;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javafx.beans.binding.Bindings;
@@ -37,8 +35,6 @@ import org.fxmisc.richtext.CodeArea;
 public class Controller {
 
     @FXML
-    private Button helloButton;
-    @FXML
     private TabPane tabPane;
     @FXML
     private MenuItem undoMI,redoMI;
@@ -46,6 +42,13 @@ public class Controller {
     private MenuItem selectAllMI,cutMI,copyMI,pasteMI;
     @FXML
     private MenuItem saveMI, saveAsMI, closeMI;
+
+    @FXML
+    private Button compileButton, compileAndRunButton, stopButton;
+
+    private ProcessBuilder processBuilder;
+
+
 
     // list of saved tabs and their content
     private HashMap<Tab,String> savedContents = new HashMap<>();
@@ -71,14 +74,7 @@ public class Controller {
             }
         });
 
-//        // trying to access primary stage here does not work
-//        Stage primaryStage = (Stage) tabPane.getScene().getWindow();
-//        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-//            @Override
-//            public void handle(WindowEvent event) {
-//                handleExit(new ActionEvent());
-//            }
-//        });
+
 
         // set disable property when no tabs are open
         saveMI.disableProperty().bind(noTabs());
@@ -90,6 +86,10 @@ public class Controller {
         cutMI.disableProperty().bind(noTabs());
         copyMI.disableProperty().bind(noTabs());
         pasteMI.disableProperty().bind(noTabs());
+        compileButton.disableProperty().bind(noTabs());
+        compileAndRunButton.disableProperty().bind(noTabs());
+        stopButton.disableProperty().bind(noTabs());
+
     }
 
     /**
@@ -110,18 +110,33 @@ public class Controller {
      *              and its source.
      */
     @FXML
-    private void handleHelloButton(ActionEvent event) {
-        // create a new input dialog
-        TextInputDialog inputDialog = new TextInputDialog();
-        inputDialog.setTitle("Give me a number");
-        inputDialog.setHeaderText("Give me an integer from 0 to 255:");
-        // showAndWait() returns an optional that contains the result of the dialogue
-        Optional<String> result = inputDialog.showAndWait();
+    private void handleCompile(ActionEvent event) throws IOException {
+        // create a new File
+        File codeFile = new File(getSelectedTab().getText());
 
-        // If the ok button is clicked
-        if (result.isPresent()) {
-            helloButton.setText(inputDialog.getEditor().getText());
+        codeFile.createNewFile();
+        System.out.println(codeFile.getAbsolutePath());
+
+        FileWriter myWriter = new FileWriter(getSelectedTab().getText());
+        myWriter.write(getSelectedTextBox().getText());
+        myWriter.close();
+
+
+        String command = "javac " + codeFile.getPath();
+        this.processBuilder = new ProcessBuilder(command);
+        this.processBuilder.directory(new File(codeFile.getAbsoluteFile().getParent()));
+
+        Process process = this.processBuilder.start();
+        // for reading the output from stream
+        BufferedReader stdInput
+                = new BufferedReader(new InputStreamReader(
+                process.getInputStream()));
+        String s = null;
+        while ((s = stdInput.readLine()) != null) {
+            System.out.println(s);
         }
+
+
     }
 
 
@@ -133,8 +148,13 @@ public class Controller {
      *              and its source.
      */
     @FXML
-    private void handleGoodbyeButton(ActionEvent event) {
-        this.getSelectedTextBox().appendText(" Goodbye");
+    private void handleCompileAndRun(ActionEvent event) {
+        int i = 0;
+    }
+
+    @FXML
+    private void handleStop(ActionEvent event) {
+        int i = 0;
     }
 
 
@@ -187,7 +207,7 @@ public class Controller {
     private void handleNew(ActionEvent event) {
         // create a new tab
         this.newTabID++;
-        Tab newTab = new Tab("Untitled-" + this.newTabID);
+        Tab newTab = new Tab("Untitled" + this.newTabID+".java");
         newTab.setOnCloseRequest(new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
