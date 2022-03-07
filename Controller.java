@@ -341,6 +341,11 @@ public class Controller {
         });
     }
 
+    /**
+     * Method to change tab names to include their directories if they are the same name
+     *
+     * @param newTab A tab object that has just been opened or saved with a new name.
+     */
     private void checkConflictingNames(Tab newTab){
         for (Tab tab: tabPane.getTabs()) {
             if(!tab.equals(newTab)) {
