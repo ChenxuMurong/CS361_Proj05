@@ -177,7 +177,8 @@ public class Controller {
      * @throws IOException and InterruptedException
      *
      */
-    @FXML private void runProcess(String[][] commands) throws IOException, InterruptedException {
+    @FXML
+    private void runProcess(String[][] commands) throws IOException, InterruptedException {
         // create a new File
         File codeFile = new File(getSelectedTab().getText());
 
@@ -191,11 +192,7 @@ public class Controller {
         for (String[] command: commands) {
             this.processBuilder = new ProcessBuilder(command);
             this.processBuilder.directory(new File(codeFile.getAbsoluteFile().getParent()));
-
             this.process = this.processBuilder.start();
-
-
-
             this.process.waitFor();
             int result = process.exitValue();
 
@@ -229,10 +226,7 @@ public class Controller {
             if(command[0].equals("javac")){
                 compiled = true;
             }
-
         }
-
-
     }
 
 
@@ -347,6 +341,37 @@ public class Controller {
         });
     }
 
+    private void checkConflictingNames(Tab newTab){
+        for (Tab tab: tabPane.getTabs()) {
+            if(!tab.equals(newTab)) {
+                if (tab.getText().equals(newTab.getText())) {
+
+                    String[] newFileDirs = this.savedPaths.get(newTab).split("/");
+                    String[] tabFileDirs = this.savedPaths.get(tab).split("/");
+
+                    for(int i = 0; i<Math.max(newFileDirs.length, tabFileDirs.length)-1; i++){
+                        if(i>Math.min(newFileDirs.length, tabFileDirs.length)-2){
+                            System.out.println("dif lengths");
+                            boolean newLarger = newFileDirs.length>tabFileDirs.length;
+                            if(newLarger){
+                                tab.setText(tabFileDirs[i-1]+"/"+tab.getText());
+                            }else{
+                                newTab.setText(newFileDirs[i-1]+"/"+newTab.getText());
+                            }
+                            return;
+                        }
+                        if(!newFileDirs[i].equals(tabFileDirs[i])){
+                            tab.setText(tabFileDirs[i]+"/"+tab.getText());
+                            newTab.setText(newFileDirs[i]+"/"+newTab.getText());
+                            return;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     /**
      * Handler method for menu bar item Open. It shows a dialog and let the user
      * select a text file to be loaded to the text box.
@@ -376,6 +401,7 @@ public class Controller {
             this.handleNew(event);
             // set text/name of the tab to the filename
             this.getSelectedTab().setText(selectedFile.getName());
+            checkConflictingNames(this.getSelectedTab());
             this.newTabID--;  // no need to increment
             try {
                 // reads the file content to a String
@@ -571,6 +597,7 @@ public class Controller {
                 this.savedContents.put(getSelectedTab(), getSelectedTextBox().getText());
                 this.savedPaths.put(getSelectedTab(), fileToSave.getPath());
                 this.getSelectedTab().setText(fileToSave.getName());
+                checkConflictingNames(this.getSelectedTab());
             } catch ( IOException e ) {
                 Alert alertBox = new Alert(Alert.AlertType.ERROR);
                 alertBox.setHeaderText("File Saving Error");
