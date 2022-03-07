@@ -7,14 +7,19 @@
 */
 
 
-/* Set hello button color to light green */
-#helloButton {
+/* Set compile button color to light blue */
+#compileButton{
+    -fx-background-color: LightBlue;
+}
+
+/* Set compile & run button color to light green */
+#compileAndRunButton {
     -fx-background-color: LightGreen;
 }
 
-/* Set goodbye button color to light pink */
-#goodbyeButton {
-    -fx-background-color: LightPink;
+/* Set stop button color to light red */
+#stopButton {
+    -fx-background-color: #ffaaaa;
 }
 
 /* Set general styling of the button class */
