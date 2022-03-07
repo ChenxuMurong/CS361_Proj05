@@ -356,7 +356,6 @@ public class Controller {
 
                     for(int i = 0; i<Math.max(newFileDirs.length, tabFileDirs.length)-1; i++){
                         if(i>Math.min(newFileDirs.length, tabFileDirs.length)-2){
-                            System.out.println("dif lengths");
                             boolean newLarger = newFileDirs.length>tabFileDirs.length;
                             if(newLarger){
                                 tab.setText(tabFileDirs[i-1]+"/"+tab.getText());
