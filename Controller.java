@@ -315,6 +315,7 @@ public class Controller {
         // create a new tab
         this.newTabID++;
         Tab newTab = new Tab("Untitled" + this.newTabID+".java");
+        newTab.setId("Untitled-" + this.newTabID);
         newTab.setOnCloseRequest(new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
@@ -329,6 +330,7 @@ public class Controller {
 
         // add new tab to the tabPane
         tabPane.getTabs().add(newTab);
+
         // make the newly created tab the topmost
         tabPane.getSelectionModel().selectLast();
         newTab.setOnCloseRequest(new EventHandler<Event>() {
@@ -354,8 +356,8 @@ public class Controller {
             if(!tab.equals(newTab)) {
                 if (tab.getText().equals(newTab.getText())) {
 
-                    String[] newFileDirs = this.savedPaths.get(newTab).split("/");
                     String[] tabFileDirs = this.savedPaths.get(tab).split("/");
+                    String[] newFileDirs = this.savedPaths.get(newTab).split("/");
 
                     for(int i = 0; i<Math.max(newFileDirs.length, tabFileDirs.length)-1; i++){
                         if(i>Math.min(newFileDirs.length, tabFileDirs.length)-2){
@@ -404,20 +406,34 @@ public class Controller {
         File selectedFile = fileChooser.showOpenDialog( tabPane.getScene().getWindow() );
         // if user selects a file (instead of pressing cancel button
         if (selectedFile != null) {
+
+            // check if user is trying to open the same exact file.
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getId().equals(selectedFile.getPath())) {
+                    // if so, switch to existing tab.
+                    SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                    selectionModel.select(tab); // select by tab
+                    return;
+                }
+            }
+
             // open a new tab
             this.handleNew(event);
             // set text/name of the tab to the filename
             this.getSelectedTab().setText(selectedFile.getName());
-            checkConflictingNames(this.getSelectedTab());
-            this.newTabID--;  // no need to increment
+            this.getSelectedTab().setId(selectedFile.getPath());
             try {
                 // reads the file content to a String
                 String content = new String(Files.readAllBytes(
                         Paths.get(selectedFile.getPath())));
                 this.getSelectedTextBox().replaceText(content);
                 // update savedContents field
-                this.savedContents.put(getSelectedTab(), content);
                 this.savedPaths.put(getSelectedTab(), selectedFile.getPath());
+
+
+                this.savedContents.put(getSelectedTab(), content);
+                checkConflictingNames(this.getSelectedTab());
+                this.newTabID--;  // no need to increment
             } catch (IOException e) {
                 Alert alertBox = new Alert(Alert.AlertType.ERROR);
                 alertBox.setHeaderText("File Opening Error");
