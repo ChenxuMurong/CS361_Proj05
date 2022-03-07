@@ -47,6 +47,7 @@ public class Controller {
     private Button compileButton, compileAndRunButton, stopButton;
 
     private ProcessBuilder processBuilder;
+    private Process process;
 
 
 
@@ -110,7 +111,15 @@ public class Controller {
      *              and its source.
      */
     @FXML
-    private void handleCompile(ActionEvent event) throws IOException {
+    private void handleCompile(ActionEvent event) throws IOException, InterruptedException {
+        // create a new File
+        String[] command = {"javac", getSelectedTab().getText()};
+        String[][] commands = {command};
+        runProcess(commands);
+
+    }
+
+    @FXML private void runProcess(String[][] commands) throws IOException, InterruptedException {
         // create a new File
         File codeFile = new File(getSelectedTab().getText());
 
@@ -122,18 +131,23 @@ public class Controller {
         myWriter.close();
 
 
-        String command = "javac " + codeFile.getPath();
-        this.processBuilder = new ProcessBuilder(command);
-        this.processBuilder.directory(new File(codeFile.getAbsoluteFile().getParent()));
+//        String[] command = {"javac", codeFile.getPath()};
 
-        Process process = this.processBuilder.start();
-        // for reading the output from stream
-        BufferedReader stdInput
-                = new BufferedReader(new InputStreamReader(
-                process.getInputStream()));
-        String s = null;
-        while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
+        for (String[] command: commands) {
+            this.processBuilder = new ProcessBuilder(command);
+            this.processBuilder.directory(new File(codeFile.getAbsoluteFile().getParent()));
+
+            this.process = this.processBuilder.start();
+            // for reading the output from stream
+            BufferedReader stdInput
+                    = new BufferedReader(new InputStreamReader(
+                    process.getInputStream()));
+            String s = null;
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
+            }
+            this.process.waitFor();
+
         }
 
 
@@ -148,8 +162,14 @@ public class Controller {
      *              and its source.
      */
     @FXML
-    private void handleCompileAndRun(ActionEvent event) {
-        int i = 0;
+    private void handleCompileAndRun(ActionEvent event) throws IOException, InterruptedException {
+        String fileName = getSelectedTab().getText();
+        String[] compileCommand = {"javac", fileName };
+        fileName = fileName.substring(0,fileName.length()-5);
+        String[] runCommand = {"java", fileName};
+        String[][] commands = {compileCommand,runCommand};
+        runProcess(commands);
+
     }
 
     @FXML
