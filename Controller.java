@@ -342,7 +342,10 @@ public class Controller {
     }
 
     /**
-     * Method to change tab names to include their directories if they are the same name
+     * Method to change tab names to include the first directory that differs if they have the same name
+     * If one tab is in a parent directory of the other then it will just change the name of the
+     * tab in the parent directory. If they are not exact children of eachother then
+     * the names will show the first directory that each differ at.
      *
      * @param newTab A tab object that has just been opened or saved with a new name.
      */
