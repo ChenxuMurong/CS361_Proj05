@@ -113,10 +113,40 @@ public class Controller {
     @FXML
     private void handleCompile(ActionEvent event) throws IOException, InterruptedException {
         // create a new File
+        makeDialogue(event);
         String[] command = {"javac", getSelectedTab().getText()};
         String[][] commands = {command};
         runProcess(commands);
 
+    }
+
+    private void makeDialogue(ActionEvent event){
+        if (! selectedTabIsSaved()) {
+            // create a new dialog
+            Dialog dialog = new Dialog();
+            // set the prompt text depending on exiting or closing
+            String promptText = String.format(
+                    "Do you want to save %s before compiling?",
+                    getSelectedTab().getText());
+
+            dialog.setContentText(promptText);
+            // add Yes, No, Cancel button
+            dialog.getDialogPane().getButtonTypes().addAll(
+                    ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            Optional<ButtonType> result  = dialog.showAndWait();
+            // call handleSave() if user chooses YES
+            if (result.get() == ButtonType.YES) {
+                this.handleSave(event);
+                // keep the tab if the save is unsuccessful (eg. canceled)
+                if (! this.selectedTabIsSaved()) {
+                    return;
+                }
+            }
+            // quit the dialog and keep selected tab if user chooses CANCEL
+            else if (result.get() == ButtonType.CANCEL) {
+                return;
+            }
+        }
     }
 
     @FXML private void runProcess(String[][] commands) throws IOException, InterruptedException {
@@ -124,8 +154,6 @@ public class Controller {
         File codeFile = new File(getSelectedTab().getText());
 
         codeFile.createNewFile();
-        System.out.println(codeFile.getAbsolutePath());
-
         FileWriter myWriter = new FileWriter(getSelectedTab().getText());
         myWriter.write(getSelectedTextBox().getText());
         myWriter.close();
@@ -163,6 +191,7 @@ public class Controller {
      */
     @FXML
     private void handleCompileAndRun(ActionEvent event) throws IOException, InterruptedException {
+        makeDialogue(event);
         String fileName = getSelectedTab().getText();
         String[] compileCommand = {"javac", fileName };
         fileName = fileName.substring(0,fileName.length()-5);
