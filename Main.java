@@ -9,6 +9,8 @@
 package proj4CerratoCohenXu;
 
 import javafx.application.Application;
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.stage.WindowEvent;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.StyleClassedTextArea;
 
 import java.io.IOException;
 
@@ -55,19 +58,23 @@ public class Main extends Application {
             }
         });
 
-        primaryStage.setTitle("Project 4");
+        primaryStage.setTitle("Project 5");
 
         // make VirtualizedScrollPane hold CodeArea
         MyCodeArea myCodeArea = new MyCodeArea();
         CodeArea codeArea = myCodeArea.getCodeArea();
         VirtualizedScrollPane tabScene = new VirtualizedScrollPane<>(codeArea);
+        tabScene.setPrefSize(600,200);
         // traverse the child node of root to find TabPane
         for (Node node : root.getChildrenUnmodifiable()) {
             if (node instanceof TabPane) {
                 Tab initialTab = ((TabPane) node).getTabs().get(0);
                 initialTab.setContent(tabScene);
+
             }
         }
+
+
 
         // Load css file
         Scene scene = new Scene(root);

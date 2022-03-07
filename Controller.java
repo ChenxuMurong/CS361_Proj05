@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.StyleClassedTextArea;
 
 
 /**
@@ -46,8 +47,12 @@ public class Controller {
     @FXML
     private Button compileButton, compileAndRunButton, stopButton;
 
+    @FXML
+    private StyleClassedTextArea mainArea;
+
     private ProcessBuilder processBuilder;
     private Process process;
+    private String processOutput;
 
 
 
@@ -152,6 +157,27 @@ public class Controller {
         return true;
     }
 
+    private static void copyInThread(final InputStream in, final OutputStream out) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        int x = in.read();
+                        if (x < 0) {
+                            return;
+                        }
+                        if (out != null) {
+                            out.write(x);
+                        }
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } .start();
+    }
+
     @FXML private void runProcess(String[][] commands) throws IOException, InterruptedException {
         // create a new File
         File codeFile = new File(getSelectedTab().getText());
@@ -161,23 +187,44 @@ public class Controller {
         myWriter.write(getSelectedTextBox().getText());
         myWriter.close();
 
-
-//        String[] command = {"javac", codeFile.getPath()};
+        boolean compiled = false;
 
         for (String[] command: commands) {
             this.processBuilder = new ProcessBuilder(command);
             this.processBuilder.directory(new File(codeFile.getAbsoluteFile().getParent()));
 
             this.process = this.processBuilder.start();
-            // for reading the output from stream
-            BufferedReader stdInput
-                    = new BufferedReader(new InputStreamReader(
-                    process.getInputStream()));
-            String s = null;
-            while ((s = stdInput.readLine()) != null) {
-                System.out.println(s);
-            }
+
             this.process.waitFor();
+            int result = process.exitValue();
+            if(result == 0) {
+                // for reading the output from stream
+                BufferedReader stdInput
+                        = new BufferedReader(new InputStreamReader(
+                        process.getInputStream()));
+                String line = "";
+                if(!compiled) {
+                    this.mainArea.appendText("Compiled Successfully\n");
+                }
+                while ((line = stdInput.readLine()) != null) {
+                    this.mainArea.appendText(line + "\n");
+                }
+            }
+            else {
+
+                BufferedReader stdError
+                        = new BufferedReader(new InputStreamReader(
+                        process.getErrorStream()));
+                String error = "";
+                while ((error = stdError.readLine()) != null) {
+                    this.mainArea.appendText(error + "\n");
+                }
+                process.destroy();
+                return;
+            }
+            if(command[0].equals("javac")){
+                compiled = true;
+            }
 
         }
 
@@ -207,8 +254,8 @@ public class Controller {
     }
 
     @FXML
-    private void handleStop(ActionEvent event) {
-        int i = 0;
+    private void handleStop(ActionEvent event) throws IOException, InterruptedException {
+        this.process.destroy();
     }
 
 
@@ -273,6 +320,7 @@ public class Controller {
         MyCodeArea myCodeArea = new MyCodeArea();
         CodeArea codeArea = myCodeArea.getCodeArea();
         newTab.setContent(new VirtualizedScrollPane<>(codeArea));
+
         // add new tab to the tabPane
         tabPane.getTabs().add(newTab);
         // make the newly created tab the topmost

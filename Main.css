@@ -28,3 +28,10 @@
 .root {
     -fx-font-size: 10pt;
 }
+
+#mainArea{
+    -fx-border-color:Black;
+}
+
+
+
