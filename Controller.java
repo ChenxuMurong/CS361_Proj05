@@ -35,6 +35,7 @@ import org.fxmisc.richtext.StyleClassedTextArea;
  */
 public class Controller {
 
+
     @FXML
     private TabPane tabPane;
     @FXML
@@ -82,6 +83,7 @@ public class Controller {
 
 
 
+
         // set disable property when no tabs are open
         saveMI.disableProperty().bind(noTabs());
         saveAsMI.disableProperty().bind(noTabs());
@@ -98,6 +100,7 @@ public class Controller {
 
     }
 
+
     /**
      * returns a new BooleanBinding that holds true if
      * there is no tab in TabPane
@@ -107,18 +110,17 @@ public class Controller {
     }
 
     /**
-     * Handler method for hello button. When hello button is clicked,
-     * a text input dialog is created, and it will wait for user input.
-     * The text of hello button will be changed to the user input if
-     * user clicks ok button of the dialogue.
+     * Handler method for compile button. When compile button is clicked,
+     * the IDE will compile selected tab.
      *
+     * @throws IOException and InterruptedException
      * @param event An ActionEvent object that gives information about the event
      *              and its source.
      */
     @FXML
     private void handleCompile(ActionEvent event) throws IOException, InterruptedException {
         // create a new File
-        if(makeDialogue(event)) {
+        if(makeSaveDialogue(event)) {
             String[] command = {"javac", getSelectedTab().getText()};
             String[][] commands = {command};
             runProcess(commands);
@@ -126,7 +128,16 @@ public class Controller {
 
     }
 
-    private boolean makeDialogue(ActionEvent event){
+    /**
+     *  method for making the dialogue asking to save file about to be compiled. Will return if
+     *  true if compile should happen and false if action was canceled
+     *
+     * @return boolean
+     * @param event An ActionEvent object that gives information about the event
+     *              and its source.
+     *
+     */
+    private boolean makeSaveDialogue(ActionEvent event){
         if (! selectedTabIsSaved()) {
             // create a new dialog
             Dialog dialog = new Dialog();
@@ -157,27 +168,15 @@ public class Controller {
         return true;
     }
 
-    private static void copyInThread(final InputStream in, final OutputStream out) {
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        int x = in.read();
-                        if (x < 0) {
-                            return;
-                        }
-                        if (out != null) {
-                            out.write(x);
-                        }
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        } .start();
-    }
 
+    /**
+     *  Method for running the proccess with the given commands
+     *
+     * @return boolean
+     * @param commands An array of String arrays which correspond to a set of commands
+     * @throws IOException and InterruptedException
+     *
+     */
     @FXML private void runProcess(String[][] commands) throws IOException, InterruptedException {
         // create a new File
         File codeFile = new File(getSelectedTab().getText());
@@ -195,8 +194,12 @@ public class Controller {
 
             this.process = this.processBuilder.start();
 
+
+
             this.process.waitFor();
             int result = process.exitValue();
+
+//            if command ran successfully then print out the input stream
             if(result == 0) {
                 // for reading the output from stream
                 BufferedReader stdInput
@@ -211,6 +214,7 @@ public class Controller {
                 }
             }
             else {
+//                when command throws an error will print out the error
 
                 BufferedReader stdError
                         = new BufferedReader(new InputStreamReader(
@@ -233,15 +237,16 @@ public class Controller {
 
 
     /**
-     * Handler method for goodbye button. When goodbye button is clicked,
-     * the word "Goodbye" will append to the text box in the selected tab.
+     * Handler method for compile and run button. When the button is clicked,
+     * the IDE will compile the selected tab and then run the given code if able
      *
+     * @throws IOException and InterruptedException
      * @param event An ActionEvent object that gives information about the event
      *              and its source.
      */
     @FXML
     private void handleCompileAndRun(ActionEvent event) throws IOException, InterruptedException {
-        if(makeDialogue(event)) {
+        if(makeSaveDialogue(event)) {
 
             String fileName = getSelectedTab().getText();
             String[] compileCommand = {"javac", fileName};
@@ -253,6 +258,13 @@ public class Controller {
 
     }
 
+    /**
+     *  Handler method for stop button. When the button is clicked the IDE will destroy the current process
+     *
+     * @param event An ActionEvent object that gives information about the event
+     *              and its source.
+     *
+     */
     @FXML
     private void handleStop(ActionEvent event) throws IOException, InterruptedException {
         this.process.destroy();
