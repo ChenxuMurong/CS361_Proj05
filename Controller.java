@@ -113,14 +113,15 @@ public class Controller {
     @FXML
     private void handleCompile(ActionEvent event) throws IOException, InterruptedException {
         // create a new File
-        makeDialogue(event);
-        String[] command = {"javac", getSelectedTab().getText()};
-        String[][] commands = {command};
-        runProcess(commands);
+        if(makeDialogue(event)) {
+            String[] command = {"javac", getSelectedTab().getText()};
+            String[][] commands = {command};
+            runProcess(commands);
+        }
 
     }
 
-    private void makeDialogue(ActionEvent event){
+    private boolean makeDialogue(ActionEvent event){
         if (! selectedTabIsSaved()) {
             // create a new dialog
             Dialog dialog = new Dialog();
@@ -139,14 +140,16 @@ public class Controller {
                 this.handleSave(event);
                 // keep the tab if the save is unsuccessful (eg. canceled)
                 if (! this.selectedTabIsSaved()) {
-                    return;
+                    return false;
                 }
             }
             // quit the dialog and keep selected tab if user chooses CANCEL
             else if (result.get() == ButtonType.CANCEL) {
-                return;
+                return false;
             }
+
         }
+        return true;
     }
 
     @FXML private void runProcess(String[][] commands) throws IOException, InterruptedException {
@@ -191,13 +194,15 @@ public class Controller {
      */
     @FXML
     private void handleCompileAndRun(ActionEvent event) throws IOException, InterruptedException {
-        makeDialogue(event);
-        String fileName = getSelectedTab().getText();
-        String[] compileCommand = {"javac", fileName };
-        fileName = fileName.substring(0,fileName.length()-5);
-        String[] runCommand = {"java", fileName};
-        String[][] commands = {compileCommand,runCommand};
-        runProcess(commands);
+        if(makeDialogue(event)) {
+
+            String fileName = getSelectedTab().getText();
+            String[] compileCommand = {"javac", fileName};
+            fileName = fileName.substring(0, fileName.length() - 5);
+            String[] runCommand = {"java", fileName};
+            String[][] commands = {compileCommand, runCommand};
+            runProcess(commands);
+        }
 
     }
 
