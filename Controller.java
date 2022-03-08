@@ -338,6 +338,8 @@ public class Controller {
                 handleClose(new ActionEvent());
             }
         });
+
+
     }
 
     /**
@@ -419,6 +421,7 @@ public class Controller {
             // set text/name of the tab to the filename
             this.getSelectedTab().setText(selectedFile.getName());
             this.getSelectedTab().setId(selectedFile.getPath());
+            this.getSelectedTab().setTooltip(new Tooltip(this.getSelectedTab().getId()));
             try {
                 // reads the file content to a String
                 String content = new String(Files.readAllBytes(

@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -69,7 +70,7 @@ public class Main extends Application {
             if (node instanceof TabPane) {
                 Tab initialTab = ((TabPane) node).getTabs().get(0);
                 initialTab.setContent(tabScene);
-
+                initialTab.setTooltip(new Tooltip(initialTab.getText()));
             }
         }
 
