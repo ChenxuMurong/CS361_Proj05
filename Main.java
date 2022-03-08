@@ -1,16 +1,14 @@
 /*
  * File: Main.java
- * Names: Erik Cohen, Matt Cerrato, Andy Xu
+ * Names: Chloe Zhang, Matt Cerrato, Baron Wang
  * Class: CS 361
- * Project 4
- * Date: February 28
+ * Project 5
+ * Date: March 7
  */
 
-package proj4CerratoCohenXu;
+package proj5CerratoWangZhang;
 
 import javafx.application.Application;
-import javafx.beans.Observable;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,13 +21,14 @@ import javafx.scene.Scene;
 import javafx.stage.WindowEvent;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.StyleClassedTextArea;
 
 import java.io.IOException;
 
 
 /**
  * Main class sets up the stage
+ *
+ * @author Matt Cerrato, Baron Wang, Chloe Zhang
  *
  */
 public class Main extends Application {

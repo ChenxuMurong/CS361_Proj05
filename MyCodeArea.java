@@ -1,12 +1,12 @@
 /*
  * File: Main.java
- * Names: Erik Cohen, Matt Cerrato, Andy Xu
+ * Names: Chloe Zhang, Matt Cerrato, Baron Wang
  * Class: CS 361
- * Project 4
- * Date: February 28
+ * Project 5
+ * Date: March 7
  */
 
-package proj4CerratoCohenXu;
+package proj5CerratoWangZhang;
 
 import java.time.Duration;
 import java.util.Collection;

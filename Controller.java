@@ -1,17 +1,16 @@
 /*
  * File: Controller.java
- * Names: Erik Cohen, Matt Cerrato, Andy Xu
+ * Names: Chloe Zhang, Matt Cerrato, Baron Wang
  * Class: CS 361
- * Project 4
- * Date: February 28
+ * Project 5
+ * Date: March 7
  */
 
-package proj4CerratoCohenXu;
+package proj5CerratoWangZhang;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import javafx.beans.binding.Bindings;
@@ -22,8 +21,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleClassedTextArea;
